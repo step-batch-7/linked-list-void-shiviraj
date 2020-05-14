@@ -91,8 +91,17 @@ List_ptr reverse(List_ptr list)
   return list;
 };
 
-List_ptr map(List_ptr list, Mapper mapper){
-
+List_ptr map(List_ptr list, Mapper mapper)
+{
+  List_ptr mapped_list = create_list();
+  Node_ptr node = list->first;
+  for (int i = 0; i < list->length; i++)
+  {
+    Element mapped_element = mapper(node->element);
+    add_to_list(mapped_list, mapped_element);
+    node = node->next;
+  }
+  return mapped_list;
 };
 List_ptr filter(List_ptr, Predicate);
 Element reduce(List_ptr, Element, Reducer);
