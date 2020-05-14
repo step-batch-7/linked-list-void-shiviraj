@@ -80,8 +80,15 @@ Status insert_at(List_ptr list, Element element, int position)
   return Success;
 };
 
-List_ptr reverse(List_ptr list){
-
+List_ptr reverse(List_ptr list)
+{
+  for (int i = 0; i < list->length; i++)
+  {
+    Node_ptr last_node = remove_from_end(list);
+    insert_at(list, last_node->element, i);
+    free(last_node);
+  }
+  return list;
 };
 
 List_ptr map(List_ptr list, Mapper mapper){
@@ -102,6 +109,7 @@ Element remove_from_end(List_ptr list)
 {
   NodePair_ptr node_pair = prev_current_node_pair(list, list->length);
   list->last = node_pair->prev;
+  list->last->next = NULL;
   list->length--;
   free(node_pair);
   return node_pair->current;
