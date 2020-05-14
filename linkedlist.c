@@ -230,4 +230,14 @@ Status add_unique(List_ptr list, Element element, Matcher matcher)
   return add_to_list(list, element);
 };
 
-Status clear_list(List_ptr);
+Status clear_list(List_ptr list)
+{
+  Node_ptr node = list->first;
+  for (int i = 0; i < list->length; i++)
+  {
+    Node_ptr node_to_remove = node;
+    node = node->next;
+    free(node_to_remove);
+  }
+  return Success;
+};
