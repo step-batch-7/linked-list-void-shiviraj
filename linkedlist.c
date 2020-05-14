@@ -142,7 +142,9 @@ Element remove_from_start(List_ptr list)
   Node_ptr node = list->first;
   list->first = node->next;
   list->length--;
-  return node;
+  Element element = node->element;
+  free(node);
+  return element;
 };
 Element remove_from_end(List_ptr list)
 {
@@ -204,10 +206,11 @@ Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
     return remove_from_start(list);
   if (node_pair->current == NULL)
     return remove_from_end(list);
-  Node_ptr node_to_remove = node_pair->current;
+  Element element = node_pair->current->element;
   node_pair->prev->next = node_pair->current->next;
+  free(node_pair->current);
   free(node_pair);
-  return node_to_remove;
+  return element;
 };
 
 List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
