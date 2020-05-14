@@ -139,6 +139,8 @@ void forEach(List_ptr list, ElementProcessor processor)
 
 Element remove_from_start(List_ptr list)
 {
+  if (list->length = 0)
+    return NULL;
   Node_ptr node = list->first;
   list->first = node->next;
   list->length--;
@@ -149,6 +151,8 @@ Element remove_from_start(List_ptr list)
 
 Element remove_from_end(List_ptr list)
 {
+  if (list->length = 0)
+    return NULL;
   NodePair_ptr node_pair = prev_current_node_pair(list, list->length);
   list->last = node_pair->prev;
   list->last->next = NULL;
@@ -247,5 +251,6 @@ Status clear_list(List_ptr list)
     node = node->next;
     free(node_to_remove);
   }
+  free(list);
   return Success;
 };
