@@ -210,9 +210,11 @@ NodePair_ptr first_occurrence_pair(List_ptr list, Element element, Matcher match
 Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
 {
   NodePair_ptr node_pair = first_occurrence_pair(list, element, matcher);
-  if (node_pair->prev == NULL)
+  if (list->length == 0 || node_pair->current == NULL)
+    return NULL;
+  if (node_pair->current == list->first)
     return remove_from_start(list);
-  if (node_pair->current == NULL)
+  if (node_pair->current == list->last)
     return remove_from_end(list);
   Element removed_element = node_pair->current->element;
   node_pair->prev->next = node_pair->current->next;
