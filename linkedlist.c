@@ -124,9 +124,28 @@ Element remove_at(List_ptr list, int position)
   return node_pair->current;
 };
 
+Status is_include_element(List_ptr list, Element element, Matcher matcher)
+{
+  Node_ptr node = list->first;
+  for (int i = 0; i < list->length; i++)
+  {
+    Status is_included = matcher(node->element, element);
+    if (is_included)
+      return Success;
+    node = node->next;
+  }
+  return Failure;
+}
+
 Element remove_first_occurrence(List_ptr, Element element, Matcher matcher);
 List_ptr remove_all_occurrences(List_ptr, Element element, Matcher matcher); // Returns List of removed elements
 
-Status add_unique(List_ptr list, Element element, Matcher matcher);
+Status add_unique(List_ptr list, Element element, Matcher matcher)
+{
+  Status is_element_in_list = is_include_element(list, element, matcher);
+  if (is_element_in_list)
+    return Failure;
+  return add_to_list(list, element);
+};
 
 Status clear_list(List_ptr);
