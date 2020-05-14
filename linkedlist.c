@@ -218,6 +218,7 @@ Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
     return remove_from_end(list);
   Element removed_element = node_pair->current->element;
   node_pair->prev->next = node_pair->current->next;
+  list->length--;
   free(node_pair->current);
   free(node_pair);
   return removed_element;
@@ -245,13 +246,11 @@ Status add_unique(List_ptr list, Element element, Matcher matcher)
 
 Status clear_list(List_ptr list)
 {
-  Node_ptr node = list->first;
-  while (node != NULL)
+  Node_ptr node_to_remove = list->first;
+  while (node_to_remove != NULL)
   {
-    Node_ptr node_to_remove = node;
-    node = node->next;
-    free(node_to_remove);
+    remove_from_start(list);
+    node_to_remove = list->first;
   }
-  free(list);
   return Success;
 };
