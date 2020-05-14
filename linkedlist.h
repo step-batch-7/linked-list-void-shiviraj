@@ -9,7 +9,6 @@ The Linked List maintains the element references in a sequence and provides conv
 #ifndef __LINKEDLIST_H_
 #define __LINKEDLIST_H_
 
-
 typedef enum
 {
   Failure,
