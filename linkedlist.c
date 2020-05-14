@@ -165,11 +165,11 @@ Element remove_from_end(List_ptr list)
 
 Element remove_at(List_ptr list, int position)
 {
-  if (!is_valid_position(list->length, position))
+  if (!is_valid_position(list->length - 1, position))
     return NULL;
   if (position == 0)
     return remove_from_start(list);
-  if (position == list->length)
+  if (position == list->length - 1)
     return remove_from_end(list);
   NodePair_ptr node_pair = prev_current_node_pair(list, position);
   node_pair->prev->next = node_pair->current->next;
