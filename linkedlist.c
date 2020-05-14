@@ -142,23 +142,26 @@ Element remove_from_start(List_ptr list)
   Node_ptr node = list->first;
   list->first = node->next;
   list->length--;
-  Element element = node->element;
+  Element removed_element = node->element;
   free(node);
-  return element;
+  return removed_element;
 };
+
 Element remove_from_end(List_ptr list)
 {
   NodePair_ptr node_pair = prev_current_node_pair(list, list->length);
   list->last = node_pair->prev;
   list->last->next = NULL;
   list->length--;
+  Element removed_element = node_pair->current->element;
+  free(node_pair->current);
   free(node_pair);
-  return node_pair->current;
+  return removed_element;
 };
 
 Element remove_at(List_ptr list, int position)
 {
-  if (!is_valid_position(list, position))
+  if (!is_valid_position(list->length, position))
     return NULL;
   if (position == 0)
     return remove_from_start(list);
@@ -167,8 +170,10 @@ Element remove_at(List_ptr list, int position)
   NodePair_ptr node_pair = prev_current_node_pair(list, position);
   node_pair->prev->next = node_pair->current->next;
   list->length--;
+  Element removed_element = node_pair->current->element;
+  free(node_pair->current);
   free(node_pair);
-  return node_pair->current;
+  return removed_element;
 };
 
 Status is_include_element(List_ptr list, Element element, Matcher matcher)
@@ -206,11 +211,11 @@ Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
     return remove_from_start(list);
   if (node_pair->current == NULL)
     return remove_from_end(list);
-  Element element = node_pair->current->element;
+  Element removed_element = node_pair->current->element;
   node_pair->prev->next = node_pair->current->next;
   free(node_pair->current);
   free(node_pair);
-  return element;
+  return removed_element;
 };
 
 List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
@@ -236,7 +241,7 @@ Status add_unique(List_ptr list, Element element, Matcher matcher)
 Status clear_list(List_ptr list)
 {
   Node_ptr node = list->first;
-  for (int i = 0; i < list->length; i++)
+  while (node != NULL)
   {
     Node_ptr node_to_remove = node;
     node = node->next;
