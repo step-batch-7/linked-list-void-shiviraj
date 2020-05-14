@@ -98,8 +98,23 @@ Element remove_from_start(List_ptr list)
   list->length--;
   return node;
 };
-Element remove_from_end(List_ptr);
-Element remove_at(List_ptr, int position);
+Element remove_from_end(List_ptr list)
+{
+  NodePair_ptr node_pair = prev_current_node_pair(list, list->length);
+  list->last = node_pair->prev;
+  list->length--;
+  free(node_pair);
+  return node_pair->current;
+};
+
+Element remove_at(List_ptr list, int position)
+{
+  NodePair_ptr node_pair = prev_current_node_pair(list, position);
+  node_pair->prev->next = node_pair->current->next;
+  list->length--;
+  free(node_pair);
+  return node_pair->current;
+};
 
 Element remove_first_occurrence(List_ptr, Element element, Matcher matcher);
 List_ptr remove_all_occurrences(List_ptr, Element element, Matcher matcher); // Returns List of removed elements
