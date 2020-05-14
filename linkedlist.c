@@ -17,6 +17,23 @@ Node_ptr create_node(Element element)
   return node;
 }
 
+Status is_valid_position(int list_length, int position)
+{
+  return position >= 0 && list_length >= position;
+}
+
+NodePair_ptr prev_current_node_pair(List_ptr list, int index)
+{
+  NodePair_ptr node_pair = malloc(sizeof(NodePair));
+  node_pair->current = list->first;
+  for (int i = 0; i < index; i++)
+  {
+    node_pair->prev = node_pair->current;
+    node_pair->current = node_pair->prev->next;
+  }
+  return node_pair;
+}
+
 Status add_to_list(List_ptr list, Element element)
 {
   Node_ptr node = create_node(element);
@@ -28,8 +45,38 @@ Status add_to_list(List_ptr list, Element element)
   return Success;
 };
 
-Status add_to_start(List_ptr, Element);
-Status insert_at(List_ptr, Element element, int position);
+Status add_to_start(List_ptr list, Element element)
+{
+  Node_ptr node = create_node(element);
+  node->next = list->first;
+  list->first = node;
+  list->length++;
+  if (list->last == NULL)
+    list->last = node;
+  return Success;
+};
+
+void insert_into_list(List_ptr list, Node_ptr node, NodePair_ptr node_pair)
+{
+  node_pair->prev->next = node;
+  node->next = node_pair->current;
+  list->length++;
+}
+
+Status insert_at(List_ptr list, Element element, int position)
+{
+  Status is_valid = is_valid_position(list->length, position);
+  if (!is_valid)
+    return Failure;
+  if (position == 0)
+    return add_to_start(list, element);
+  if (position == list->length)
+    return add_to_list(list, element);
+  Node_ptr node = create_node(element);
+  NodePair_ptr node_pair = prev_current_node_pair(list, position);
+  insert_into_list(list, node, node_pair);
+  return Success;
+};
 
 List_ptr reverse(List_ptr);
 
