@@ -103,9 +103,39 @@ List_ptr map(List_ptr list, Mapper mapper)
   }
   return mapped_list;
 };
-List_ptr filter(List_ptr, Predicate);
-Element reduce(List_ptr, Element, Reducer);
-void forEach(List_ptr, ElementProcessor processor);
+List_ptr filter(List_ptr list, Predicate predicate)
+{
+  List_ptr filter_list = create_list();
+  Node_ptr node = list->first;
+  for (int i = 0; i < list->length; i++)
+  {
+    if (predicate(node->element))
+      add_to_list(filter_list, node->element);
+    node = node->next;
+  }
+  return filter_list;
+};
+
+Element reduce(List_ptr list, Element element, Reducer reducer)
+{
+  Node_ptr node = list->first;
+  for (int i = 0; i < list->length; i++)
+  {
+    element = reducer(element, node->element);
+    node = node->next;
+  }
+  return element;
+};
+
+void forEach(List_ptr list, ElementProcessor processor)
+{
+  Node_ptr node = list->first;
+  for (int i = 0; i < list->length; i++)
+  {
+    processor(node->element);
+    node = node->next;
+  }
+};
 
 Element remove_from_start(List_ptr list)
 {
