@@ -75,6 +75,7 @@ Status insert_at(List_ptr list, Element element, int position)
   Node_ptr node = create_node(element);
   NodePair_ptr node_pair = prev_current_node_pair(list, position);
   insert_into_list(list, node, node_pair);
+  free(node_pair);
   return Success;
 };
 
