@@ -50,6 +50,11 @@ typedef Status (*Matcher)(Element, Element);
 
 List_ptr create_list(void);
 
+Node_ptr create_node(Element element);
+Status is_valid_position(int list_length, int position);
+NodePair_ptr prev_current_node_pair(List_ptr list, int index);
+void insert_into_list(List_ptr list, Node_ptr node, NodePair_ptr node_pair);
+
 Status add_to_list(List_ptr, Element);
 Status add_to_start(List_ptr, Element);
 Status insert_at(List_ptr, Element element, int position);
@@ -64,6 +69,9 @@ void forEach(List_ptr, ElementProcessor processor);
 Element remove_from_start(List_ptr); // Returns Element which was removed
 Element remove_from_end(List_ptr);
 Element remove_at(List_ptr, int position);
+
+Status is_include_element(List_ptr list, Element element, Matcher matcher);
+NodePair_ptr first_occurrence_pair(List_ptr list, Element element, Matcher matcher);
 
 Element remove_first_occurrence(List_ptr, Element element, Matcher matcher);
 List_ptr remove_all_occurrences(List_ptr, Element element, Matcher matcher); // Returns List of removed elements
