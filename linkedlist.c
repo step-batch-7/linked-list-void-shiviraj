@@ -83,14 +83,19 @@ Status insert_at(List_ptr list, Element element, int position)
 
 List_ptr reverse(List_ptr list)
 {
-  List_ptr reversed_list = create_list();
-  Node_ptr node = list->first;
-  while (node != NULL)
+  list->last = list->first;
+  Node_ptr prev = NULL;
+  Node_ptr current = list->first;
+  Node_ptr next = NULL;
+  while (current != NULL)
   {
-    add_to_list(reversed_list, node->element);
-    node = node->next;
+    next = current->next;
+    current->next = prev;
+    prev = current;
+    current = next;
   }
-  return reversed_list;
+  list->first = prev;
+  return list;
 };
 
 List_ptr map(List_ptr list, Mapper mapper)
