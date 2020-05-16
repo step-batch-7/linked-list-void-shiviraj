@@ -229,8 +229,6 @@ Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
 
 List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
 {
-  if (list->first == NULL)
-    return NULL;
   List_ptr removed_list = create_list();
   Element removed_element = remove_first_occurrence(list, element, matcher);
   while (removed_element != NULL)
