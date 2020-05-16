@@ -205,50 +205,40 @@ Status is_include_element(List_ptr list, Element element, Matcher matcher)
   return Failure;
 }
 
-NodePair_ptr first_occurrence_pair(List_ptr list, Element element, Matcher matcher)
-{
-  NodePair_ptr node_pair = malloc(sizeof(NodePair));
-  node_pair->prev = NULL;
-  node_pair->current = list->first;
-  for (int i = 0; i < list->length; i++)
-  {
-    if (matcher(node_pair->current->element, element))
-      return node_pair;
-    node_pair->prev = node_pair->current;
-    node_pair->current = node_pair->current->next;
-  }
-  return node_pair;
-}
-
 Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
 {
-  NodePair_ptr node_pair = first_occurrence_pair(list, element, matcher);
-  if (list->length == 0 || node_pair->current == NULL)
+  Node_ptr prev = NULL;
+  Node_ptr current = list->first;
+  while (current != NULL && !(*matcher)(element, current->element))
+  {
+    prev = current;
+    current = current->next;
+  }
+  if (current == NULL)
     return NULL;
-  if (node_pair->current == list->first)
+  if (current == list->first)
     return remove_from_start(list);
-  if (node_pair->current == list->last)
+  if (current == list->last)
     return remove_from_end(list);
-  Element removed_element = node_pair->current->element;
-  node_pair->prev->next = node_pair->current->next;
+  Element removed_element = current->element;
+  prev = current->next;
+  free(current);
   list->length--;
-  free(node_pair->current);
-  free(node_pair);
   return removed_element;
 };
 
 List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
 {
-  Element removed_element = remove_first_occurrence(list, element, matcher);
-  if (list->length == 0 || removed_element == NULL)
+  if (list->first == NULL)
     return NULL;
-  List_ptr removed_elements_list = create_list();
+  List_ptr removed_list = create_list();
+  Element removed_element = remove_first_occurrence(list, element, matcher);
   while (removed_element != NULL)
   {
-    add_to_list(removed_elements_list, removed_element);
+    add_to_list(removed_list, removed_element);
     removed_element = remove_first_occurrence(list, element, matcher);
   }
-  return removed_elements_list;
+  return removed_list;
 };
 
 Status add_unique(List_ptr list, Element element, Matcher matcher)
