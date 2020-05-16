@@ -192,39 +192,35 @@ Element remove_at(List_ptr list, int position)
   return removed_element;
 };
 
+int get_position(List_ptr list, Element element, Matcher matcher)
+{
+  Node_ptr p_walker = list->first;
+  for (int i = 0; i < list->length; i++)
+  {
+    if (matcher(p_walker->element, element))
+      return i;
+    p_walker = p_walker->next;
+  }
+  return -1;
+}
+
 Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
 {
-  Node_ptr prev = NULL;
-  Node_ptr current = list->first;
-  while (current != NULL && !(*matcher)(element, current->element))
-  {
-    prev = current;
-    current = current->next;
-  }
-  if (current == NULL)
-    return NULL;
-  if (current == list->first)
-    return remove_from_start(list);
-  if (current == list->last)
-    return remove_from_end(list);
-  Element removed_element = current->element;
-  prev = current->next;
-  free(current);
-  list->length--;
-  return removed_element;
-};
+  int position = get_position(list, element, matcher);
+  return remove_at(list, position);
+}
 
 List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
 {
-  List_ptr removed_list = create_list();
-  Element removed_element = remove_first_occurrence(list, element, matcher);
-  while (removed_element != NULL)
+  List_ptr removed_element_list = create_list();
+  int position = get_position(list, element, matcher);
+  while (position != -1)
   {
-    add_to_list(removed_list, removed_element);
-    removed_element = remove_first_occurrence(list, element, matcher);
+    add_to_list(removed_element_list, remove_at(list, position));
+    position = get_position(list, element, matcher);
   }
-  return removed_list;
-};
+  return removed_element_list;
+}
 
 Status is_include_element(List_ptr list, Element element, Matcher matcher)
 {

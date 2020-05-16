@@ -71,8 +71,8 @@ Element remove_from_end(List_ptr);
 Element remove_at(List_ptr, int position);
 
 Status is_include_element(List_ptr list, Element element, Matcher matcher);
-NodePair_ptr first_occurrence_pair(List_ptr list, Element element, Matcher matcher);
 
+int get_position(List_ptr list, Element element, Matcher matcher);
 Element remove_first_occurrence(List_ptr, Element element, Matcher matcher);
 List_ptr remove_all_occurrences(List_ptr, Element element, Matcher matcher); // Returns List of removed elements
 
