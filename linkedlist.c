@@ -233,8 +233,10 @@ Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
 
 List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
 {
-  List_ptr removed_elements_list = create_list();
   Element removed_element = remove_first_occurrence(list, element, matcher);
+  if (list->length == 0 || removed_element == NULL)
+    return NULL;
+  List_ptr removed_elements_list = create_list();
   while (removed_element != NULL)
   {
     add_to_list(removed_elements_list, removed_element);
