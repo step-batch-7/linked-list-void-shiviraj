@@ -25,6 +25,7 @@ Status is_valid_position(int list_length, int position)
 NodePair_ptr prev_current_node_pair(List_ptr list, int index)
 {
   NodePair_ptr node_pair = malloc(sizeof(NodePair));
+  node_pair->prev = NULL;
   node_pair->current = list->first;
   for (int i = 0; i < index; i++)
   {
@@ -156,6 +157,8 @@ Element remove_from_end(List_ptr list)
 {
   if (list->length == 0)
     return NULL;
+  if (list->length == 1)
+    return remove_from_start(list);
   NodePair_ptr node_pair = prev_current_node_pair(list, list->length);
   list->last = node_pair->prev;
   list->last->next = NULL;
