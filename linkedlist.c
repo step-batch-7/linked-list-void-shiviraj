@@ -160,18 +160,19 @@ Element remove_from_start(List_ptr list)
 
 Element remove_from_end(List_ptr list)
 {
-  if (list->length == 0)
+  if (list->first == NULL)
     return NULL;
-  if (list->length == 1)
+  if (list->first->next == NULL)
     return remove_from_start(list);
-  NodePair_ptr node_pair = prev_current_node_pair(list, list->length);
-  list->last = node_pair->prev;
-  list->last->next = NULL;
+  Node_ptr second_last = list->first;
+  while (second_last->next->next != NULL)
+    second_last = second_last->next;
+  Element element = second_last->next->element;
+  free(second_last->next);
+  second_last->next = NULL;
+  list->last = second_last;
   list->length--;
-  Element removed_element = node_pair->current->element;
-  free(node_pair->current);
-  free(node_pair);
-  return removed_element;
+  return element;
 };
 
 Element remove_at(List_ptr list, int position)
