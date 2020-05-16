@@ -192,19 +192,6 @@ Element remove_at(List_ptr list, int position)
   return removed_element;
 };
 
-Status is_include_element(List_ptr list, Element element, Matcher matcher)
-{
-  Node_ptr node = list->first;
-  for (int i = 0; i < list->length; i++)
-  {
-    Status is_included = matcher(node->element, element);
-    if (is_included)
-      return Success;
-    node = node->next;
-  }
-  return Failure;
-}
-
 Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
 {
   Node_ptr prev = NULL;
@@ -238,6 +225,19 @@ List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
   }
   return removed_list;
 };
+
+Status is_include_element(List_ptr list, Element element, Matcher matcher)
+{
+  Node_ptr node = list->first;
+  while (node != NULL)
+  {
+    Status is_included = matcher(node->element, element);
+    if (is_included)
+      return Success;
+    node = node->next;
+  }
+  return Failure;
+}
 
 Status add_unique(List_ptr list, Element element, Matcher matcher)
 {
