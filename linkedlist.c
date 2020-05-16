@@ -142,6 +142,8 @@ Element remove_from_start(List_ptr list)
 {
   if (list->length == 0)
     return NULL;
+  if (list->length == 1)
+    list->last = NULL;
   Node_ptr node = list->first;
   list->first = node->next;
   list->length--;
